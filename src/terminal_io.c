@@ -13,6 +13,8 @@ void set_stdin_timeout(int deciseconds);
 
 void disableRawMode();
 
+struct termios get_terminal_settings();
+
 void setup_terminal_io() {
     enableRawMode();
     set_stdin_min_read_size(0);
@@ -22,10 +24,7 @@ void setup_terminal_io() {
 }
 
 void enableRawMode() {
-    if (tcgetattr(STDIN_FILENO, &initial_tsettings) == -1) {
-        panic("Error trying to retreive terminal settings");
-    }
-
+    initial_tsettings = get_terminal_settings();
     struct termios raw = initial_tsettings;
     // Modify terminal input flags
     raw.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
@@ -45,19 +44,25 @@ void enableRawMode() {
 }
 
 void set_stdin_min_read_size(int size) {
-    struct termios tsettings;
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &tsettings);
+    struct termios tsettings = get_terminal_settings();
     tsettings.c_cc[VMIN] = 0;
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &tsettings);
 }
 
 void set_stdin_timeout(int deciseconds) {
-    struct termios tsettings;
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &tsettings);
+    struct termios tsettings = get_terminal_settings();
     tsettings.c_cc[VTIME] = deciseconds;
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &tsettings);
 }
 
 void disableRawMode() {
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &initial_tsettings);
+}
+
+struct termios get_terminal_settings() {
+    struct termios t_settings;
+    if (tcgetattr(STDIN_FILENO, &t_settings) == -1) {
+        panic("Error trying to retreive terminal settings");
+    }
+    return t_settings;
 }
