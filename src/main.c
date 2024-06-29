@@ -19,7 +19,7 @@ int main() {
         } else {
             printf("%c\n", c);
         }
-        if (c == 'q') break;
+        if (c == CTRL_WITH('q')) break;
     }
     return 0;
 }
