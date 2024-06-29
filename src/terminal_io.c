@@ -1,8 +1,5 @@
 #include "terminal_io.h"
 
-#include <termios.h>
-#include <unistd.h>
-
 struct termios initial_tsettings;
 
 void enableRawMode();
