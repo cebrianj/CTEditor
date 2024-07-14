@@ -1,7 +1,8 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#include "terminal_io.h"
+#include "escape_sequences.h"
+#include "terminal.h"
 #include "user_input_processor.h"
 #include "user_input_reader.h"
 #include "utils.h"
