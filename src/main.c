@@ -25,13 +25,31 @@ int main() {
 
 void draw_rows(buffer* buffer, terminal_size term_size) {
     for (int i = 0; i < term_size.rows; i++) {
-        buffer_append(buffer, "~", 1);
+        if (i == term_size.cols / 4) {
+            draw_version_row(buffer, term_size);
+        } else {
+            buffer_append(buffer, "~", 1);
+        }
         buffer_append(buffer, CLEAR_CURSOR_TO_RIGHT_SEQUENCE,
                       CLEAR_CURSOR_TO_RIGHT_SEQUENCE_BYTES);
         if (i < term_size.rows - 1) {
             buffer_append(buffer, "\r\n", 2);
         }
     }
+}
+void draw_version_row(buffer* buffer, terminal_size term_size) {
+    char msg[80];
+    int msglen = snprintf(msg, sizeof(msg), "CTEditor -- version %s", "X.Y.Z");
+    if (msglen > term_size.cols) msglen = term_size.cols;
+
+    // Center text
+    int padding = (term_size.cols - msglen) / 2;
+    if (padding) {
+        buffer_append(buffer, "~", 1);
+        padding--;
+    }
+    while (padding--) buffer_append(buffer, " ", 1);
+    buffer_append(buffer, msg, msglen);
 }
 
 void refresh_screen(terminal_size term_size) {
