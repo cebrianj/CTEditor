@@ -8,6 +8,21 @@
 #include "user_input_reader.h"
 #include "utils.h"
 
+void draw_rows(buffer* buffer, terminal_size term_size);
+void refresh_screen(terminal_size term_size);
+
+int main() {
+    char c;
+    setup_terminal_io();
+    terminal_size term_size = get_terminal_size();
+    while (1) {
+        refresh_screen(term_size);
+        c = read_key();
+        process_key(c);
+    }
+    return 0;
+}
+
 void draw_rows(buffer* buffer, terminal_size term_size) {
     for (int i = 0; i < term_size.rows; i++) {
         buffer_append(buffer, "~", 1);
@@ -27,16 +42,4 @@ void refresh_screen(terminal_size term_size) {
                   CURSOR_TO_BEGINNING_SEQUENCE_BYTES);
     write(STDOUT_FILENO, buffer.string, buffer.len);
     buffer_free(&buffer);
-}
-
-int main() {
-    char c;
-    setup_terminal_io();
-    terminal_size term_size = get_terminal_size();
-    while (1) {
-        refresh_screen(term_size);
-        c = read_key();
-        process_key(c);
-    }
-    return 0;
 }
