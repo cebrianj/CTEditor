@@ -26,6 +26,8 @@ int main() {
 void draw_rows(buffer* buffer, terminal_size term_size) {
     for (int i = 0; i < term_size.rows; i++) {
         buffer_append(buffer, "~", 1);
+        buffer_append(buffer, CLEAR_CURSOR_TO_RIGHT_SEQUENCE,
+                      CLEAR_CURSOR_TO_RIGHT_SEQUENCE_BYTES);
         if (i < term_size.rows - 1) {
             buffer_append(buffer, "\r\n", 2);
         }
@@ -34,7 +36,6 @@ void draw_rows(buffer* buffer, terminal_size term_size) {
 
 void refresh_screen(terminal_size term_size) {
     buffer buffer = BUF_INIT;
-    buffer_append(&buffer, CLEAR_SCREEN_SEQUENCE, CLEAR_SCREEN_SEQUENCE_BYTES);
     buffer_append(&buffer, HIDE_CURSOR_SEQUENCE, HIDE_CURSOR_SEQUENCE_BYTES);
     buffer_append(&buffer, CURSOR_TO_BEGINNING_SEQUENCE,
                   CURSOR_TO_BEGINNING_SEQUENCE_BYTES);
