@@ -3,8 +3,9 @@
 
 #include <stdlib.h>
 
+#include "user_event.h"
 #include "utils.h"
 
-void process_key(char c);
+USER_EVENT process_key(char c);
 
 #endif
