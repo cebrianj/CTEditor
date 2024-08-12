@@ -35,11 +35,13 @@ void draw_rows(buffer* buffer, terminal_size term_size) {
 void refresh_screen(terminal_size term_size) {
     buffer buffer = BUF_INIT;
     buffer_append(&buffer, CLEAR_SCREEN_SEQUENCE, CLEAR_SCREEN_SEQUENCE_BYTES);
+    buffer_append(&buffer, HIDE_CURSOR_SEQUENCE, HIDE_CURSOR_SEQUENCE_BYTES);
     buffer_append(&buffer, CURSOR_TO_BEGINNING_SEQUENCE,
                   CURSOR_TO_BEGINNING_SEQUENCE_BYTES);
     draw_rows(&buffer, term_size);
     buffer_append(&buffer, CURSOR_TO_BEGINNING_SEQUENCE,
                   CURSOR_TO_BEGINNING_SEQUENCE_BYTES);
+    buffer_append(&buffer, SHOW_CURSOR_SEQUENCE, SHOW_CURSOR_SEQUENCE_BYTES);
     write(STDOUT_FILENO, buffer.string, buffer.len);
     buffer_free(&buffer);
 }
