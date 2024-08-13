@@ -12,11 +12,11 @@
 
 editor_state state;
 void initialize_editor_state();
-int handle_event(USER_EVENT event, terminal_size term_size);
+int handle_event(user_event event, terminal_size term_size);
 
 int main() {
     user_input user_input;
-    USER_EVENT event;
+    user_event event;
 
     setup_terminal_io();
     terminal_size term_size = get_terminal_size();
@@ -34,7 +34,7 @@ void initialize_editor_state() {
     state.cursor_y = 0;
 }
 
-int handle_event(USER_EVENT event, terminal_size term_size) {
+int handle_event(user_event event, terminal_size term_size) {
     switch (event) {
         case NONE:
             break;

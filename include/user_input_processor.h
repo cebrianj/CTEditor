@@ -7,6 +7,6 @@
 #include "user_input.h"
 #include "utils.h"
 
-USER_EVENT process_input(user_input user_input);
+user_event process_input(user_input user_input);
 
 #endif

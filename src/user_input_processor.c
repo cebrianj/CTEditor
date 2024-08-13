@@ -1,9 +1,9 @@
 #include "user_input_processor.h"
 
-USER_EVENT process_event(key_event event);
-USER_EVENT process_value(char value);
+user_event process_event(key_event event);
+user_event process_value(char value);
 
-USER_EVENT process_input(user_input user_input) {
+user_event process_input(user_input user_input) {
     if (user_input.event != KEY_NONE) {
         return process_event(user_input.event);
     }
@@ -11,7 +11,7 @@ USER_EVENT process_input(user_input user_input) {
     return process_value(user_input.value);
 }
 
-USER_EVENT process_event(key_event event) {
+user_event process_event(key_event event) {
     switch (event) {
         case KEY_ARROW_UP:
             return MOVE_CURSOR_UP;
@@ -27,7 +27,7 @@ USER_EVENT process_event(key_event event) {
     }
 }
 
-USER_EVENT process_value(char value) {
+user_event process_value(char value) {
     switch (value) {
         case CTRL_WITH('q'):
             clean_terminal();
