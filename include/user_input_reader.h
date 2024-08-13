@@ -2,6 +2,7 @@
 #define USER_INPUT_READER_H
 
 #include <errno.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "escape_sequences.h"

@@ -1,5 +1,12 @@
 #include "user_input_reader.h"
 
+#define SEQUENCE_ARROW_UP "[A"
+#define SEQUENCE_ARROW_DOWN "[B"
+#define SEQUENCE_ARROW_RIGHT "[C"
+#define SEQUENCE_ARROW_LEFT "[D"
+
+user_input read_sequence();
+
 user_input read_input() {
     int nread;
     char c;
@@ -13,24 +20,29 @@ user_input read_input() {
         return create_user_input_from_char(c);
     }
 
-    char sequence[3];
-    if (read(STDIN_FILENO, &sequence[0], 1) != 1 ||
-        read(STDIN_FILENO, &sequence[1], 1) != 1) {
+    return read_sequence();
+}
+
+user_input read_sequence() {
+    char sequence[4] = {0};
+    int sequence_bytes = read(STDIN_FILENO, sequence, sizeof(sequence) - 1);
+
+    if (sequence_bytes <= 0) {
         return create_user_input_from_char(ESCAPE_SEQUENCE_PREFIX);
     }
 
-    if (sequence[0] == '[') {
-        switch (sequence[1]) {
-            // Map arrows
-            case 'A':
-                return create_user_input_from_event(KEY_ARROW_UP);
-            case 'B':
-                return create_user_input_from_event(KEY_ARROW_DOWN);
-            case 'C':
-                return create_user_input_from_event(KEY_ARROW_RIGHT);
-            case 'D':
-                return create_user_input_from_event(KEY_ARROW_LEFT);
-        }
+    if (strcmp(sequence, SEQUENCE_ARROW_UP) == 0) {
+        return create_user_input_from_event(KEY_ARROW_UP);
+    }
+    if (strcmp(sequence, SEQUENCE_ARROW_DOWN) == 0) {
+        return create_user_input_from_event(KEY_ARROW_DOWN);
+    }
+    if (strcmp(sequence, SEQUENCE_ARROW_RIGHT) == 0) {
+        return create_user_input_from_event(KEY_ARROW_RIGHT);
+    }
+
+    if (strcmp(sequence, SEQUENCE_ARROW_LEFT) == 0) {
+        return create_user_input_from_event(KEY_ARROW_LEFT);
     }
 
     return create_user_input_from_char(ESCAPE_SEQUENCE_PREFIX);
