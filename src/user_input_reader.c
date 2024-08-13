@@ -9,6 +9,8 @@
 #define SEQUENCE_END_2 "[F"
 #define SEQUENCE_END_3 "OF"
 
+#define SEQUENCE_DELETE "[3~"
+
 #define SEQUENCE_PAGE_UP "[5~"
 #define SEQUENCE_PAGE_DOWN "[6~"
 
@@ -87,6 +89,10 @@ user_input read_sequence() {
     }
     if (strcmp(sequence, SEQUENCE_END_3) == 0) {
         return create_user_input_from_event(KEY_END);
+    }
+
+    if (strcmp(sequence, SEQUENCE_DELETE) == 0) {
+        return create_user_input_from_event(KEY_DELETE);
     }
     return create_user_input_from_char(ESCAPE_SEQUENCE_PREFIX);
 }

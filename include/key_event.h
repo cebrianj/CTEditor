@@ -9,6 +9,7 @@ typedef enum {
     KEY_ARROW_RIGHT,
     KEY_HOME,
     KEY_END,
+    KEY_DELETE,
     KEY_PAGE_UP,
     KEY_PAGE_DOWN
 } key_event;
