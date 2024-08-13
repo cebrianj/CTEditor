@@ -4,8 +4,9 @@
 #include <stdlib.h>
 
 #include "user_event.h"
+#include "user_input.h"
 #include "utils.h"
 
-USER_EVENT process_key(char c);
+USER_EVENT process_input(user_input user_input);
 
 #endif

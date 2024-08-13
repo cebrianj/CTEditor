@@ -4,8 +4,10 @@
 #include <errno.h>
 #include <unistd.h>
 
+#include "escape_sequences.h"
+#include "user_input.h"
 #include "utils.h"
 
-char read_key();
+user_input read_input();
 
 #endif

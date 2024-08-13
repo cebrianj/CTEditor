@@ -15,15 +15,15 @@ void initialize_editor_state();
 int handle_event(USER_EVENT event, terminal_size term_size);
 
 int main() {
-    char c;
+    user_input user_input;
     USER_EVENT event;
 
     setup_terminal_io();
     terminal_size term_size = get_terminal_size();
     while (1) {
         refresh_screen(term_size, state);
-        c = read_key();
-        event = process_key(c);
+        user_input = read_input();
+        event = process_input(user_input);
         handle_event(event, term_size);
     }
     return 0;
