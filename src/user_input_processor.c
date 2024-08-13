@@ -13,6 +13,10 @@ user_event process_input(user_input user_input) {
 
 user_event process_event(key_event event) {
     switch (event) {
+        case KEY_PAGE_UP:
+            return MOVE_PAGE_UP;
+        case KEY_PAGE_DOWN:
+            return MOVE_PAGE_DOWN;
         case KEY_ARROW_UP:
             return MOVE_CURSOR_UP;
         case KEY_ARROW_DOWN:
