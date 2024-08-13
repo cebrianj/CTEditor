@@ -50,6 +50,12 @@ int handle_event(user_event event, terminal_size term_size) {
         case MOVE_CURSOR_RIGHT:
             state.cursor_x = min(state.cursor_x + 1, term_size.cols);
             break;
+        case MOVE_CURSOR_START:
+            state.cursor_x = 0;
+            break;
+        case MOVE_CURSOR_END:
+            state.cursor_x = term_size.cols;
+            break;
         default:
             return 1;
     }

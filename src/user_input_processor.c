@@ -17,6 +17,10 @@ user_event process_event(key_event event) {
             return MOVE_PAGE_UP;
         case KEY_PAGE_DOWN:
             return MOVE_PAGE_DOWN;
+        case KEY_HOME:
+            return MOVE_CURSOR_START;
+        case KEY_END:
+            return MOVE_CURSOR_END;
         case KEY_ARROW_UP:
             return MOVE_CURSOR_UP;
         case KEY_ARROW_DOWN:

@@ -7,6 +7,8 @@ typedef enum _user_event {
     MOVE_CURSOR_DOWN,
     MOVE_CURSOR_LEFT,
     MOVE_CURSOR_RIGHT,
+    MOVE_CURSOR_START,
+    MOVE_CURSOR_END,
     MOVE_PAGE_UP,
     MOVE_PAGE_DOWN
 } user_event;
