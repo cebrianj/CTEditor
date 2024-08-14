@@ -6,7 +6,8 @@
 #include "buffer.h"
 #include "escape_sequences.h"
 
-void draw_rows(buffer* buffer, terminal_size term_size);
+void draw_rows(buffer* buffer, terminal_size term_size,
+               const editor_state* state);
 void draw_version_row(buffer* buffer, terminal_size term_size);
 int create_move_cursor_sequence(char* buff, int buff_len, int cursor_x,
                                 int cursor_y);
@@ -16,7 +17,7 @@ void refresh_screen(terminal_size term_size, const editor_state* state) {
     buffer_append(&buffer, HIDE_CURSOR_SEQUENCE, HIDE_CURSOR_SEQUENCE_BYTES);
     buffer_append(&buffer, CURSOR_TO_BEGINNING_SEQUENCE,
                   CURSOR_TO_BEGINNING_SEQUENCE_BYTES);
-    draw_rows(&buffer, term_size);
+    draw_rows(&buffer, term_size, state);
     buffer_append(&buffer, CURSOR_TO_BEGINNING_SEQUENCE,
                   CURSOR_TO_BEGINNING_SEQUENCE_BYTES);
 
@@ -37,13 +38,14 @@ int create_move_cursor_sequence(char* buff, int buff_len, int cursor_x,
     return snprintf(buff, buff_len, "\x1b[%d;%dH", cursor_y + 1, cursor_x + 1);
 }
 
-void draw_rows(buffer* buffer, terminal_size term_size) {
+void draw_rows(buffer* buffer, terminal_size term_size,
+               const editor_state* state) {
     for (int i = 0; i < term_size.rows; i++) {
-        if (i == term_size.cols / 4) {
-            draw_version_row(buffer, term_size);
-        } else {
-            buffer_append(buffer, "~", 1);
-        }
+        (i < state->file_loaded_num_rows)
+            ? buffer_append(buffer, state->file_loaded_rows[i].chars,
+                            state->file_loaded_rows[i].size)
+            : buffer_append(buffer, "~", 1);
+
         buffer_append(buffer, CLEAR_CURSOR_TO_RIGHT_SEQUENCE,
                       CLEAR_CURSOR_TO_RIGHT_SEQUENCE_BYTES);
         if (i < term_size.rows - 1) {
@@ -51,6 +53,7 @@ void draw_rows(buffer* buffer, terminal_size term_size) {
         }
     }
 }
+
 void draw_version_row(buffer* buffer, terminal_size term_size) {
     char msg[80];
     int msglen = snprintf(msg, sizeof(msg), "CTEditor -- version %s", "X.Y.Z");
