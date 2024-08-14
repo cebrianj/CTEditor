@@ -4,6 +4,7 @@
 #include "buffer.h"
 #include "editor_state.h"
 #include "escape_sequences.h"
+#include "event_handler.h"
 #include "rendering_controller.h"
 #include "terminal.h"
 #include "user_input_processor.h"
@@ -22,35 +23,7 @@ int main() {
         refresh_screen(term_size, &state);
         user_input = read_input();
         event = process_input(user_input);
-        handle_event(event, term_size);
-    }
-    return 0;
-}
-
-int handle_event(user_event event, terminal_size term_size) {
-    switch (event) {
-        case NONE:
-            break;
-        case MOVE_CURSOR_UP:
-            state.cursor_y = max(state.cursor_y - 1, 0);
-            break;
-        case MOVE_CURSOR_DOWN:
-            state.cursor_y = min(state.cursor_y + 1, term_size.rows);
-            break;
-        case MOVE_CURSOR_LEFT:
-            state.cursor_x = max(state.cursor_x - 1, 0);
-            break;
-        case MOVE_CURSOR_RIGHT:
-            state.cursor_x = min(state.cursor_x + 1, term_size.cols);
-            break;
-        case MOVE_CURSOR_START:
-            state.cursor_x = 0;
-            break;
-        case MOVE_CURSOR_END:
-            state.cursor_x = term_size.cols;
-            break;
-        default:
-            return 1;
+        handle_event(event, &state, term_size);
     }
     return 0;
 }
