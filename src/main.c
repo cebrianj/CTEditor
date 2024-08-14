@@ -1,15 +1,12 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#include "buffer.h"
 #include "editor_state.h"
-#include "escape_sequences.h"
 #include "event_handler.h"
 #include "rendering_controller.h"
 #include "terminal.h"
 #include "user_input_processor.h"
 #include "user_input_reader.h"
-#include "utils.h"
 
 editor_state state = {0};
 
