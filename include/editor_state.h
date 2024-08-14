@@ -1,10 +1,16 @@
 #ifndef EDITOR_STATE_H
 #define EDITOR_STATE_H
 
+#include "editor_row.h"
+
 typedef struct {
     int cursor_x, cursor_y;
+
+    int file_loaded_num_rows;
+    editor_row* file_loaded_rows;
 } editor_state;
 
 editor_state* editor_state_create();
+void editor_state_append_row(editor_state* state, char* line, int len);
 
 #endif
