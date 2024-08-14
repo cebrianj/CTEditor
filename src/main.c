@@ -10,9 +10,7 @@
 #include "user_input_reader.h"
 #include "utils.h"
 
-editor_state state;
-void initialize_editor_state();
-int handle_event(user_event event, terminal_size term_size);
+editor_state state = {0};
 
 int main() {
     user_input user_input;
@@ -21,17 +19,12 @@ int main() {
     setup_terminal_io();
     terminal_size term_size = get_terminal_size();
     while (1) {
-        refresh_screen(term_size, state);
+        refresh_screen(term_size, &state);
         user_input = read_input();
         event = process_input(user_input);
         handle_event(event, term_size);
     }
     return 0;
-}
-
-void initialize_editor_state() {
-    state.cursor_x = 0;
-    state.cursor_y = 0;
 }
 
 int handle_event(user_event event, terminal_size term_size) {

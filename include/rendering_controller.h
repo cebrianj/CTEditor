@@ -4,6 +4,6 @@
 #include "editor_state.h"
 #include "terminal_size.h"
 
-void refresh_screen(terminal_size term_size, editor_state state);
+void refresh_screen(terminal_size term_size, const editor_state* state);
 
 #endif

@@ -11,7 +11,7 @@ void draw_version_row(buffer* buffer, terminal_size term_size);
 int create_move_cursor_sequence(char* buff, int buff_len, int cursor_x,
                                 int cursor_y);
 
-void refresh_screen(terminal_size term_size, editor_state state) {
+void refresh_screen(terminal_size term_size, const editor_state* state) {
     buffer buffer = BUF_INIT;
     buffer_append(&buffer, HIDE_CURSOR_SEQUENCE, HIDE_CURSOR_SEQUENCE_BYTES);
     buffer_append(&buffer, CURSOR_TO_BEGINNING_SEQUENCE,
@@ -23,7 +23,7 @@ void refresh_screen(terminal_size term_size, editor_state state) {
     const int SEQUENCE_LEN = 32;
     char move_cursor_sequence[SEQUENCE_LEN];
     int move_cursor_sequence_bytes = create_move_cursor_sequence(
-        move_cursor_sequence, SEQUENCE_LEN, state.cursor_x, state.cursor_y);
+        move_cursor_sequence, SEQUENCE_LEN, state->cursor_x, state->cursor_y);
 
     buffer_append(&buffer, move_cursor_sequence, move_cursor_sequence_bytes);
 
