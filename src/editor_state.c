@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "editor_row.h"
+#include "row.h"
 #include "utils.h"
 
 editor_state* editor_state_create() {
@@ -17,7 +17,7 @@ editor_state* editor_state_create() {
 void editor_state_append_row(editor_state* state, char* line, int len) {
     state->file_loaded_rows =
         realloc(state->file_loaded_rows,
-                sizeof(editor_row) * (state->file_loaded_num_rows + 1));
+                sizeof(row) * (state->file_loaded_num_rows + 1));
     int at = state->file_loaded_num_rows;
     state->file_loaded_rows[at].size = len;
     state->file_loaded_rows[at].chars = malloc(len + 1);
