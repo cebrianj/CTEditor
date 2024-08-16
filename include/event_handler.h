@@ -9,5 +9,4 @@
 
 int handle_event(user_event event, editor_state* state,
                  terminal_size term_size);
-
 #endif

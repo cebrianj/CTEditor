@@ -10,7 +10,9 @@ typedef enum _user_event {
     MOVE_CURSOR_START,
     MOVE_CURSOR_END,
     MOVE_PAGE_UP,
-    MOVE_PAGE_DOWN
+    MOVE_PAGE_DOWN,
+
+    INITIALIZE_FILE_BUFFER,
 } user_event;
 
 #endif

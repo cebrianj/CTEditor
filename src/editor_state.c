@@ -14,6 +14,10 @@ editor_state* editor_state_create() {
     return state;
 }
 
+void editor_state_set_filename(editor_state* state, char* filename) {
+    state->filename = filename;
+}
+
 void editor_state_append_row(editor_state* state, char* line, int len) {
     state->file_loaded_rows =
         realloc(state->file_loaded_rows,
