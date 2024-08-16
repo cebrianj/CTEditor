@@ -7,6 +7,7 @@ typedef struct {
     int cursor_x, cursor_y;
 
     char* filename;
+    int rendering_rows_offset;
     int file_loaded_num_rows;
     row* file_loaded_rows;
 } editor_state;

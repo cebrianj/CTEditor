@@ -1,12 +1,16 @@
 
 #include "event_handler.h"
 
+#include <stdbool.h>
+
 #include "file_io.h"
 #include "utils.h"
 
 void init_file_buffer(editor_state *state, terminal_size term_size);
 void editor_state_append_file_rows(char *filename, int offset, int rows,
                                    editor_state *state);
+bool is_rendering_reaching_buffer_limit(editor_state *state,
+                                        terminal_size term_size);
 
 int handle_event(user_event event, editor_state *state,
                  terminal_size term_size) {
@@ -14,9 +18,25 @@ int handle_event(user_event event, editor_state *state,
         case NONE:
             break;
         case MOVE_CURSOR_UP:
+            if (state->cursor_y == 0) {
+                state->rendering_rows_offset =
+                    max(state->rendering_rows_offset - 1, 0);
+                return 0;
+            }
             state->cursor_y = max(state->cursor_y - 1, 0);
             break;
         case MOVE_CURSOR_DOWN:
+            if (is_rendering_reaching_buffer_limit(state, term_size)) {
+                editor_state_append_file_rows(
+                    state->filename,
+                    state->rendering_rows_offset + term_size.rows,
+                    term_size.rows, state);
+            }
+
+            if (state->cursor_y + 1 == term_size.rows) {
+                state->rendering_rows_offset++;
+                return 0;
+            }
             state->cursor_y = min(state->cursor_y + 1, term_size.rows);
             break;
         case MOVE_CURSOR_LEFT:
@@ -55,4 +75,10 @@ void editor_state_append_file_rows(char *filename, int offset, int rows,
         row_free(&readed_rows[i]);
     }
     free(readed_rows);
+}
+
+bool is_rendering_reaching_buffer_limit(editor_state *state,
+                                        terminal_size term_size) {
+    return state->rendering_rows_offset + term_size.rows >=
+           state->file_loaded_num_rows;
 }

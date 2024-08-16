@@ -41,10 +41,11 @@ int create_move_cursor_sequence(char* buff, int buff_len, int cursor_x,
 void draw_rows(buffer* buffer, terminal_size term_size,
                const editor_state* state) {
     for (int i = 0; i < term_size.rows; i++) {
-        if (i < state->file_loaded_num_rows) {
-            int len = state->file_loaded_rows[i].size;
+        int at = i + state->rendering_rows_offset;
+        if (at < state->file_loaded_num_rows) {
+            int len = state->file_loaded_rows[at].size;
             len = (len > term_size.cols) ? term_size.cols : len;
-            buffer_append(buffer, state->file_loaded_rows[i].chars, len);
+            buffer_append(buffer, state->file_loaded_rows[at].chars, len);
         } else {
             buffer_append(buffer, "~", 1);
         }
