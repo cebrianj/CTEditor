@@ -1,10 +1,11 @@
-#define _GNU_SOURCE
+
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "editor_state.h"
 #include "event_handler.h"
+#include "file_io.h"
 #include "rendering_controller.h"
 #include "terminal.h"
 #include "user_input_processor.h"
@@ -35,21 +36,12 @@ int main(int argc, char *argv[]) {
 }
 
 void load_file_rows(char *filename, editor_state *state, int rows) {
-    FILE *fp = fopen(filename, "r");
-    if (!fp) panic("fopen");
+    int offset = 0;
+    row *readed_rows = file_io_read(filename, rows, offset);
     for (int i = 0; i < rows; i++) {
-        char *line = NULL;
-        size_t linecap = 0;
-        ssize_t linelen;
-        linelen = getline(&line, &linecap, fp);
-        if (linelen != -1) {
-            while (linelen > 0 &&
-                   (line[linelen - 1] == '\n' || line[linelen - 1] == '\r'))
-                linelen--;
-            editor_state_append_row(state, line, linelen);
-        }
-        free(line);
+        editor_state_append_row(state, readed_rows[i].chars,
+                                readed_rows[i].size);
+        row_free(&readed_rows[i]);
     }
-
-    fclose(fp);
+    free(readed_rows);
 }
