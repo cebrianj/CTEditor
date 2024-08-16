@@ -56,18 +56,3 @@ void draw_rows(buffer* buffer, terminal_size term_size,
         }
     }
 }
-
-void draw_version_row(buffer* buffer, terminal_size term_size) {
-    char msg[80];
-    int msglen = snprintf(msg, sizeof(msg), "CTEditor -- version %s", "X.Y.Z");
-    if (msglen > term_size.cols) msglen = term_size.cols;
-
-    // Center text
-    int padding = (term_size.cols - msglen) / 2;
-    if (padding) {
-        buffer_append(buffer, "~", 1);
-        padding--;
-    }
-    while (padding--) buffer_append(buffer, " ", 1);
-    buffer_append(buffer, msg, msglen);
-}
