@@ -9,8 +9,7 @@
 void init_file_buffer(editor_state *state, terminal_size term_size);
 void editor_state_append_file_rows(char *filename, int offset, int rows,
                                    editor_state *state);
-bool is_rendering_reaching_buffer_limit(editor_state *state,
-                                        terminal_size term_size);
+bool is_rendering_reaching_buffer_limit(editor_state *state);
 
 int handle_event(user_event event, editor_state *state,
                  terminal_size term_size) {
@@ -26,7 +25,7 @@ int handle_event(user_event event, editor_state *state,
             state->cursor_y = max(state->cursor_y - 1, 0);
             break;
         case MOVE_CURSOR_DOWN:
-            if (is_rendering_reaching_buffer_limit(state, term_size)) {
+            if (is_rendering_reaching_buffer_limit(state)) {
                 editor_state_append_file_rows(
                     state->filename,
                     state->rendering_rows_offset + term_size.rows,
@@ -68,17 +67,15 @@ void init_file_buffer(editor_state *state, terminal_size term_size) {
 
 void editor_state_append_file_rows(char *filename, int offset, int rows,
                                    editor_state *state) {
-    row *readed_rows = file_io_read(filename, rows, offset);
-    for (int i = 0; i < rows; i++) {
-        editor_state_append_row(state, readed_rows[i].chars,
-                                readed_rows[i].size);
-        row_free(&readed_rows[i]);
+    file_chunk file_chunk = file_io_read(filename, rows, offset);
+    for (int i = 0; i < file_chunk.num_rows; i++) {
+        editor_state_append_row(state, file_chunk.rows[i].chars,
+                                file_chunk.rows[i].size);
     }
-    free(readed_rows);
+    file_chunk_free_content(file_chunk);
 }
 
-bool is_rendering_reaching_buffer_limit(editor_state *state,
-                                        terminal_size term_size) {
-    return state->rendering_rows_offset + term_size.rows >=
+bool is_rendering_reaching_buffer_limit(editor_state *state) {
+    return state->rendering_rows_offset + state->cursor_y - 1 ==
            state->file_loaded_num_rows;
 }
