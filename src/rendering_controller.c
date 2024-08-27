@@ -14,6 +14,7 @@ int create_move_cursor_sequence(char* buff, int buff_len, int cursor_x,
 
 void refresh_screen(terminal_size term_size, const editor_state* state) {
     buffer buffer = BUF_INIT;
+    buffer_append(&buffer, CLEAR_SCREEN_SEQUENCE, CLEAR_SCREEN_SEQUENCE_BYTES);
     buffer_append(&buffer, HIDE_CURSOR_SEQUENCE, HIDE_CURSOR_SEQUENCE_BYTES);
     buffer_append(&buffer, CURSOR_TO_BEGINNING_SEQUENCE,
                   CURSOR_TO_BEGINNING_SEQUENCE_BYTES);
