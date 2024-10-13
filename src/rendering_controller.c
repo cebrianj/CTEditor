@@ -5,6 +5,7 @@
 
 #include "buffer.h"
 #include "escape_sequences.h"
+#include "utils.h"
 
 void draw_rows(buffer* buffer, terminal_size term_size,
                const editor_state* state);
@@ -44,9 +45,15 @@ void draw_rows(buffer* buffer, terminal_size term_size,
     for (int i = 0; i < term_size.rows; i++) {
         int at = i + state->rendering_rows_offset;
         if (at < state->file_loaded_num_rows) {
-            int len = state->file_loaded_rows[at].size;
+            int len =
+                state->file_loaded_rows[at].size - state->rendering_cols_offset;
+            len = max(len, 0);
             len = (len > term_size.cols) ? term_size.cols : len;
-            buffer_append(buffer, state->file_loaded_rows[at].chars, len);
+
+            buffer_append(buffer,
+                          state->file_loaded_rows[at].chars +
+                              state->rendering_cols_offset,
+                          len);
         } else {
             buffer_append(buffer, "~", 1);
         }

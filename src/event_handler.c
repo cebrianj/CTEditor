@@ -39,9 +39,16 @@ int handle_event(user_event event, editor_state *state,
             state->cursor_y = min(state->cursor_y + 1, term_size.rows);
             break;
         case MOVE_CURSOR_LEFT:
+            if (state->cursor_x == 0) {
+                state->rendering_cols_offset =
+                    max(state->rendering_cols_offset - 1, 0);
+            }
             state->cursor_x = max(state->cursor_x - 1, 0);
             break;
         case MOVE_CURSOR_RIGHT:
+            if (state->cursor_x == term_size.cols) {
+                state->rendering_cols_offset++;
+            }
             state->cursor_x = min(state->cursor_x + 1, term_size.cols);
             break;
         case MOVE_CURSOR_START:
